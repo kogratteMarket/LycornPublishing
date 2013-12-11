@@ -1,5 +1,7 @@
 <?php
 header('Access-Control-Allow-Origin: *');
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 $db = new PDO('sql.free.fr', 'nik94', 'nicolas');
 
