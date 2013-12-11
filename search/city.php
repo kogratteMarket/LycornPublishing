@@ -1,6 +1,8 @@
 <?php
 header('Access-Control-Allow-Origin: *');
 
+$db = new PDO('sql.free.fr', 'nik94', 'nicolas');
+
 mysql_connect('sql.free.fr', 'nik94', 'nicolas');
 mysql_select_db('nik94');
 
@@ -53,9 +55,10 @@ FROM villes_france
 ORDER BY Proximite  ".($proximity ? $proximity : 'ASC') . "
 LIMIT 1," . ($results ? $results : 10);
 
-$res = mysql_query($sql);
+$results = $db->query($sql);
+
 $data = array();
-while ($row = mysql_fetch_assoc($res)) {
+while ($row = $results->fetch(PDO::FETCH_COLUMN)) {
 	$data[] = array(
 		'cityName' => $row['ville_nom'],
         'zipCode' => $row['ville_code_postal']
@@ -71,10 +74,6 @@ while ($row = mysql_fetch_assoc($res)) {
 
     die();*/
 }
-
-require 'jsonwrapper/jsonwrapper_inner.php';
-
-header('Access-Control-Allow-Origin: *');
 
 
 echo json_encode($data);
