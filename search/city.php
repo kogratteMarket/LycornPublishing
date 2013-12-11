@@ -1,4 +1,5 @@
 <?php
+header('Access-Control-Allow-Origin: *');
 
 mysql_connect('sql.free.fr', 'nik94', 'nicolas');
 mysql_select_db('nik94');
@@ -19,7 +20,12 @@ $params = array(
 		'name' => 'results',
 		'typeCheck' => 'intval',
 		'required' => false
-	)
+	),
+    array(
+        'name' => 'proximity',
+        'typeCheck' => 'is_string',
+        'required' => false
+    )
 );
 
 foreach ($params as $param) {
@@ -43,18 +49,32 @@ $sql = "
 SELECT *,
 (6366*acos(cos(radians($lat))*cos(radians(ville_latitude_deg))*cos(radians(ville_longitude_deg)-radians($long))+sin(radians($lat))*sin(radians(ville_latitude_deg))))
 as Proximite
-from villes_france
-order by Proximite
-limit 1," . ($results ? $results : 10);
+FROM villes_france
+ORDER BY Proximite  ".($proximity ? $proximity : 'ASC') . "
+LIMIT 1," . ($results ? $results : 10);
 
 $res = mysql_query($sql);
 $data = array();
 while ($row = mysql_fetch_assoc($res)) {
 	$data[] = array(
-		'cityName' => $row['ville_nom']
+		'cityName' => $row['ville_nom'],
+        'zipCode' => $row['ville_code_postal']
 	);
+
+   /* $weatherUrl = 'http://api.previmeteo.com/06eee7d1c20d0bb49d9e909acf4ddcb0/ig/api?weather=' . $row['ville_code_postal'] . ',FR&hl=fr&res=json';
+    $fd = fopen($weatherUrl, 'r');
+    while ($content .= fread($fd));
+    fclose($fd);
+    var_dump(
+      $content
+    );
+
+    die();*/
 }
 
 require 'jsonwrapper/jsonwrapper_inner.php';
+
+header('Access-Control-Allow-Origin: *');
+
 
 echo json_encode($data);

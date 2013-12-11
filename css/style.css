@@ -1,12 +1,31 @@
-.googleMap {
-    width: 100%;
-    height: 100%;
+html,
+body {
+  background: #2d103c;
 }
-
-#mapsContainer {
-    height: 450px;
+html .result .panel,
+body .result .panel {
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  -ms-border-radius: 2px;
+  -o-border-radius: 2px;
+  border-radius: 2px;
 }
-
-.googleMap {
-    height: 100%;
+html .loader,
+body .loader {
+  z-index: 2;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: white;
+}
+html .loader .loaderItem,
+body .loader .loaderItem {
+  width: 48px;
+  height: 48px;
+  background: url('../img/loadinfo.net.gif');
+  left: 50%;
+  bottom: 50%;
+  position: absolute;
 }
