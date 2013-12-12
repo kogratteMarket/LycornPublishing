@@ -51,7 +51,7 @@ SELECT *,
 (6366*acos(cos(radians($lat))*cos(radians(ville_latitude_deg))*cos(radians(ville_longitude_deg)-radians($long))+sin(radians($lat))*sin(radians(ville_latitude_deg))))
 as Proximite
 FROM villes_france
-WHERE ville_population > 15000
+WHERE ville_population >  10
 ORDER BY Proximite  ".($proximity ? $proximity : 'ASC') . "
 LIMIT 1," . ($results ? $results : 10);
 
