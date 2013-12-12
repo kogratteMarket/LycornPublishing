@@ -63,14 +63,14 @@ while ($row = $results->fetch(PDO::FETCH_ASSOC)) {
     $weatherUrl = 'http://api.previmeteo.com/06eee7d1c20d0bb49d9e909acf4ddcb0/ig/api?weather=' . $row['ville_code_postal'] . ',FR&hl=fr&res=json';
     $weather = file_get_contents($weatherUrl);
 
-    $xml = simplexml_load_string($weatherUrl);
-    
+    $xml = simplexml_load_string($weather);
+
 	$data[] = array(
 		'cityName' => $row['ville_nom'],
         'zipCode' => $row['ville_code_postal'],
         'weather' => array(
-            'condition' => $xml->condition,
-            'temp' => $xml->temp_c
+            'condition' => $xml->weather->current_conditions->condition,
+            'temp' => $xml->weather->current_conditions->temp_c
         )
 	);
 }
