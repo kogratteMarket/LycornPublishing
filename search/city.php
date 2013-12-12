@@ -64,15 +64,15 @@ while ($row = $results->fetch(PDO::FETCH_ASSOC)) {
     $weather = file_get_contents($weatherUrl);
 
     $xml = simplexml_load_string($weather);
-    $currentCondition = $xml->weather->current_conditions->condition->attributes();
-    $currentTemp = $xml->weather->current_conditions->temp_c->attributes();
+    $currentCondition = (string) $xml->weather->current_conditions->condition['data'];
+    $currentTemp = (string) $xml->weather->current_conditions->temp_c['data'];
 
 	$data[] = array(
 		'cityName' => $row['ville_nom'],
         'zipCode' => $row['ville_code_postal'],
         'weather' => array(
-            'condition' => $currentCondition['data'],
-            'temp' => $currentTemp['data']
+            'condition' => $currentCondition,
+            'temp' => $currentTemp
         )
 	);
 }
