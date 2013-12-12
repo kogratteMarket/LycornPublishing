@@ -1,17 +1,17 @@
 class CityAroundResearch
-  constructor: (@geolocation, @proximity) ->
-    searchParams =
-      lat: @geolocation.getLat()
-      long: @geolocation.getLong()
-      results: 3
-      proximity: @proximity
+   constructor: (@geolocation, @callback = (() ->), @proximity = 'asc') ->
+      searchParams =
+         lat: @geolocation.getLat()
+         long: @geolocation.getLong()
+         results: 10
+         proximity: @proximity
 
-    that = @
+      that = @
 
-    $.get 'http://nik94.free.fr/LycornPublishing/search/city', searchParams, (data) ->
-      console?.log data
-      window.updateSearchResults data
-    , 'JSON'
+      $.get 'http://thelycornweather.sebacmieu.fr/search/city.php', searchParams, (data) ->
+         console?.log data
+         that.callback data
+      , 'JSON'
 
 
 window.lycorn = {} if !window.lycorn

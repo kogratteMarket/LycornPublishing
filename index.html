@@ -14,20 +14,22 @@
         <script type="text/javascript">
             var userLocation;
 
+            function renderSearchResults(results)
+            {
+                angular.element(document.getElementById('searchResults')).scope().$apply(function($scope) {
+                    console.log('Apply results', results, $scope);
+                    $scope.locations = results;
+                    $(document).trigger('searchResultsRendered');
+                });
+            }
             $(function() {
 
-                new lycorn.GeolocationProvider();
-
-                $(document).on('locationAvailable', function(e, location) {
+                new lycorn.GeolocationProvider(function(location) {
                     window.userLocation = location;
-                   new lycorn.CityAroundResearch(location);
+                    new lycorn.CityAroundResearch(location, renderSearchResults);
                 });
 
-                $(document).on('searchResultsRendered', function(e) {
-                    $(this).trigger('weatherRendered');
-                });
-
-                $(document).one('weatherRendered', function(e) {
+                $(document).one('searchResultsRendered', function(e) {
 
                     $('.loader').fadeOut('slow', function(e) {
                         $(this).remove();
@@ -51,27 +53,26 @@
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                         <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
+                        <!--<span class="icon-bar"></span>-->
+                        <!--<span class="icon-bar"></span>-->
+                        <!--<span class="icon-bar"></span>-->
                     </button>
-                    <a class="navbar-brand" href="#">La météo de la lycorne!</a>
+                    <a class="navbar-brand" href="/">La météo de la lycorne!</a>
                 </div>
 
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <ul class="nav navbar-nav">
-                        <li class="active"><a href="#" onClick="new lycorn.CityAroundResearch(userLocation, 'asc');">Près de chez vous</a></li>
-                        <li><a href="#" onClick="new lycorn.CityAroundResearch(userLocation, 'desc');">Hum. Et le plus loin possible dans le pays ?</a></li>
-
-                    </ul>
+                    <!--<ul class="nav navbar-nav">-->
+                        <!--<li><a href="javascript:new lycorn.CityAroundResearch(userLocation, renderSearchResults, 'asc');">Près de chez vous</a></li>-->
+                        <!--<li><a href="javascript: new lycorn.CityAroundResearch(userLocation, renderSearchResults, 'desc');">Hum. Et le plus loin possible dans le pays ?</a></li>-->
+                    <!--</ul>-->
 
                 </div><!-- /.navbar-collapse -->
             </nav>
 
             <div class="container" ng-app="myApp">
 
-                <div class="row searchResults text-center" ng-controller="SearchResults">
+                <div class="row searchResults text-center" id="searchResults"  ng-controller="SearchResults">
                     <div ng-repeat="location in locations" class="col-xs-12 col-sm-6 col-md-4 result">
                         <div class="panel {{getMetroClass($index)}} loading" data-role="searchResult">
                             <div class="panel-heading">

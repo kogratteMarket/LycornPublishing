@@ -60,17 +60,19 @@ $data = array();
 while ($row = $results->fetch(PDO::FETCH_ASSOC)) {
 
 
-    $weatherUrl = 'http://api.previmeteo.com/06eee7d1c20d0bb49d9e909acf4ddcb0/ig/api?weather=' . $row['ville_code_postal'] . ',FR&hl=fr&res=json';
+    $weatherUrl = 'http://api.previmeteo.com/06eee7d1c20d0bb49d9e909acf4ddcb0/ig/api?weather=' . $row['ville_code_postal'] . ',FR&hl=en';
     $weather = file_get_contents($weatherUrl);
 
     $xml = simplexml_load_string($weather);
+    $currentCondition = $xml->weather->current_conditions->condition->attributes();
+    $currentTemp = $xml->weather->current_conditions->temp_c->attributes();
 
 	$data[] = array(
 		'cityName' => $row['ville_nom'],
         'zipCode' => $row['ville_code_postal'],
         'weather' => array(
-            'condition' => $xml->weather->current_conditions->condition,
-            'temp' => $xml->weather->current_conditions->temp_c
+            'condition' => $currentCondition['data'],
+            'temp' => $currentTemp['data']
         )
 	);
 }
