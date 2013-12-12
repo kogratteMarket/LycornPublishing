@@ -57,7 +57,7 @@ LIMIT 1," . ($results ? $results : 10);
 $results = $db->query($sql);
 
 $data = array();
-while ($row = $results->fetch(PDO::FETCH_COLUMN)) {
+while ($row = $results->fetch(PDO::FETCH_ASSOC)) {
 	$data[] = array(
 		'cityName' => $row['ville_nom'],
         'zipCode' => $row['ville_code_postal']
