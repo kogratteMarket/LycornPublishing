@@ -219,6 +219,7 @@
   window.myApp.controller('SearchResults', function($scope) {
     $scope.locations = [];
     $scope.arriving = true;
+    $scope.doshow = {};
     $scope.getTempIndicatorClass = function(temp) {
       if (temp < 6) {
         return 'cold';

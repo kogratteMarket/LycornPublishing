@@ -6,10 +6,13 @@ window.myApp.controller 'SearchResults', ($scope) ->
 
    $scope.arriving = true
 
+   $scope.doshow = {}
+
    $scope.getTempIndicatorClass = (temp) ->
       return 'cold' if temp < 6
       return 'warm' if temp < 22
       return 'hot'
+
 
    $scope.getMetroClass = (index) ->
       availableClasses = [

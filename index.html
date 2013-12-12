@@ -19,6 +19,7 @@
                 console.log('Apply results', results, $scope);
                 $scope.locations = results;
                 $scope.arriving = false;
+
                 $(document).trigger('searchResultsRendered');
             });
         }
@@ -78,8 +79,7 @@
         <div class="row searchResults text-center">
             <div ng-repeat="location in locations" class="col-xs-12 col-sm-6 col-md-4 result">
                 <div class="panel {{getMetroClass($index)}} loading" data-role="searchResult">
-                    <div class="panel-heading">
-
+                    <div ng-click="doshow[location.zipCode] = !doshow[location.zipCode]" ng-init="doshow[location.zipCode] = false" class="panel-heading">
                         <div class='row'>
                             <div ng-if="$index % 2 == 0" class="col-xs-2 text-left">
                                 <small>{{location.weather.temp}}°C</small>
@@ -97,7 +97,7 @@
                         </div>
 
                     </div>
-                    <div class="panel-body">
+                    <div class="panel-body" ng-show="doshow[location.zipCode] == true">
                         <div class="row">
                             <div class="col-xs-12">
                                 <div class="weatherIcon">
