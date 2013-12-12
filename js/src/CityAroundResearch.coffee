@@ -8,7 +8,7 @@ class CityAroundResearch
 
       that = @
 
-      $.get 'http://thelycornweather.sebacmieu.fr/search/city.php', searchParams, (data) ->
+      $.get 'http://thelycornweather.sebacmieu.fr/search/city', searchParams, (data) ->
          console?.log data
          that.callback data
       , 'JSON'
