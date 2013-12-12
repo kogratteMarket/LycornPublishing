@@ -7,11 +7,11 @@
       var searchParams, that;
       this.geolocation = geolocation;
       this.callback = callback != null ? callback : (function() {});
-      this.proximity = proximity != null ? proximity : 'desc';
+      this.proximity = proximity != null ? proximity : 'asc';
       searchParams = {
         lat: this.geolocation.getLat(),
         long: this.geolocation.getLong(),
-        results: 3,
+        results: 10,
         proximity: this.proximity
       };
       that = this;
@@ -175,21 +175,7 @@
 
   window.myApp = angular.module('myApp', []);
 
-  window.myApp.factory('updateSearchResults', function($window, $q, $rootScope) {
-    var deferred;
-    deferred = $q.defer();
-    $window.renderSearchResults = function(obj) {
-      deferred.resolve(obj);
-      return $rootScope.$apply();
-    };
-    return deferred.promise;
-  });
-
-  window.myApp.controller('SearchResults', function($scope, updateSearchResults) {
-    updateSearchResults.then(function(locations) {
-      $scope.locations = locations;
-      return $(document).trigger('searchResultsRendered');
-    });
+  window.myApp.controller('SearchResults', function($scope) {
     $scope.locations = [];
     return $scope.getMetroClass = function(index) {
       var availableClasses;
