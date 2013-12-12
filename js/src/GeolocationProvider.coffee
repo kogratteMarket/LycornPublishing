@@ -27,7 +27,7 @@ class GeolocationProvider
             sensor: 'true'
 
          $.get 'http://maps.googleapis.com/maps/api/geocode/json', geocodingParams, (data) ->
-            for component of results.address_components
+            for component of data.results.address_components
                for type in component.types
                   city = component.short_name if type is "locality"
                   country = component.short_name if type is "country"
@@ -62,7 +62,7 @@ class GeolocationProvider
                sensor: 'true'
 
             $.get 'http://maps.googleapis.com/maps/api/geocode/json', geocodingParams, (data) ->
-               for component of results.address_components
+               for component of data.results.address_components
                   for type in component.types
                      city = component.short_name if type is "locality"
                      country = component.short_name if type is "country"

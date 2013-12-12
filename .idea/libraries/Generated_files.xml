@@ -1,0 +1,23 @@
+<component name="libraryTable">
+  <library name="Generated files" type="javaScript">
+    <properties>
+      <sourceFilesUrls>
+        <item url="file://$PROJECT_DIR$/js/src/Loader.js" />
+        <item url="file://$PROJECT_DIR$/js/src/SearchResults.js" />
+        <item url="file://$PROJECT_DIR$/js/src/GeolocationProvider.js" />
+      </sourceFilesUrls>
+    </properties>
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/js/AngularRewrite/App/app.weatherAroundMe.js" />
+      <root url="file://$PROJECT_DIR$/js/AngularRewrite/Services/geolocationProvider.js" />
+      <root url="file://$PROJECT_DIR$/js/AngularRewrite/App/weatherAroundMe.js" />
+      <root url="file://$PROJECT_DIR$/js/AngularRewrite/App/app.weatherAroundMe.js" />
+      <root url="file://$PROJECT_DIR$/js/AngularRewrite/Services/geolocationProvider.js" />
+      <root url="file://$PROJECT_DIR$/js/AngularRewrite/App/weatherAroundMe.js" />
+      <root url="file://$PROJECT_DIR$/js/src/Loader.js" />
+      <root url="file://$PROJECT_DIR$/js/src/SearchResults.js" />
+      <root url="file://$PROJECT_DIR$/js/src/GeolocationProvider.js" />
+    </CLASSES>
+    <SOURCES />
+  </library>
+</component>

@@ -6,9 +6,15 @@
   border-radius: @radius;
 }
 
+.weatherIcon (@iconName) {
+  background-image: url('../img/weather/@{iconName}.svg');
+  width: 50px;
+  height: 50px;
+}
+
 html, body {
 
-    background: #2d103c;
+  background: #2d103c;
 
   .result {
     .panel {
@@ -16,22 +22,43 @@ html, body {
     }
   }
 
-  .loader {
-    z-index: 2;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: white;
+  .introduction {
 
-    .loaderItem {
-      width: 48px;
-      height: 48px;
-      background: url('../img/loadinfo.net.gif');
-      left: 50%;
-      bottom: 50%;
-      position: absolute;
+      color: white;
+
+    .loader {
+
+      width: 200px;
+      margin: auto;
+      :before {
+        content: '';
+        vertical-align: middle;
+      }
+
+      margin-top: 20%;
+
+      div {
+        height: 1px;
+        width: 0;
+margin: auto;
+        background: white;
+      }
     }
   }
-}#
+}
+
+.tempIcon {
+  width: 10%;
+  margin-left: 20px;
+}
+
+.weatherIcon {
+  img {
+    &.temp {
+      width: 20%;
+      float: left;
+    }
+    width: 30%;
+    margin: auto;
+  }
+}

@@ -1,102 +1,123 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Lycorn publishing</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<head>
+    <title>Lycorn publishing</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
-        <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=true"></script>
-        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.4/angular.min.js"></script>
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=true"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.4/angular.min.js"></script>
 
-        <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-        <script type="text/javascript" src="js/main.js"></script>
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
 
-        <script type="text/javascript">
-            var userLocation;
+    <script type="text/javascript">
+        var userLocation;
 
-            function renderSearchResults(results)
-            {
-                angular.element(document.getElementById('searchResults')).scope().$apply(function($scope) {
-                    console.log('Apply results', results, $scope);
-                    $scope.locations = results;
-                    $(document).trigger('searchResultsRendered');
-                });
-            }
-            $(function() {
+        function renderSearchResults(results) {
+            angular.element(document.getElementById('searchResults')).scope().$apply(function ($scope) {
+                console.log('Apply results', results, $scope);
+                $scope.locations = results;
+                $scope.arriving = false;
+                $(document).trigger('searchResultsRendered');
+            });
+        }
+        $(function () {
 
-                new lycorn.GeolocationProvider(function(location) {
-                    window.userLocation = location;
-                    new lycorn.CityAroundResearch(location, renderSearchResults);
-                });
+            new lycorn.GeolocationProvider(function (location) {
+                window.userLocation = location;
+                new lycorn.CityAroundResearch(location, renderSearchResults);
+            });
 
-                $(document).one('searchResultsRendered', function(e) {
+            new lycornLoader($('.loader div'));
 
-                    $('.loader').fadeOut('slow', function(e) {
-                        $(this).remove();
-                    });
+            $(document).one('searchResultsRendered', function (e) {
+
+                $('.introduction').fadeOut('slow', function (e) {
+                    $(this).remove();
                 });
             });
-        </script>
+        });
+    </script>
 
-        <link href="css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="css/bootstrap.css" rel="stylesheet" type="text/css"/>
 
-        <link href="css/style.css" rel="stylesheet" type="text/css" />
-    </head>
+    <link href="css/style.css" rel="stylesheet" type="text/css"/>
+</head>
 
-    <body>
-        <div class="loader">
-            <div class="loaderItem"></div>
+<body ng-app="myApp">
+
+<nav class="navbar navbar-default" role="navigation">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+        </button>
+        <a class="navbar-brand" href="/">La météo de la lycorne!</a>
+    </div>
+
+</nav>
+
+<div class="container" id="searchResults"  ng-controller="SearchResults">
+
+    <section ng-show="arriving">
+        <div class="row">
+        <div class="introduction col-xs-12 text-center">
+            <h1>The Lycorn Weather</h1>
+            <h2>Quelle météo fait-il autour de vous?</h2>
+
+
+            <div class="loader">
+                <h4>Chargement en cours</h4>
+                <div></div>
+            </div>
         </div>
+        </div>
+    </section>
 
-        <content>
-            <nav class="navbar navbar-default" role="navigation">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                        <span class="sr-only">Toggle navigation</span>
-                        <!--<span class="icon-bar"></span>-->
-                        <!--<span class="icon-bar"></span>-->
-                        <!--<span class="icon-bar"></span>-->
-                    </button>
-                    <a class="navbar-brand" href="/">La météo de la lycorne!</a>
-                </div>
+    <section ng-hide="arriving">
+        <div class="row searchResults text-center">
+            <div ng-repeat="location in locations" class="col-xs-12 col-sm-6 col-md-4 result">
+                <div class="panel {{getMetroClass($index)}} loading" data-role="searchResult">
+                    <div class="panel-heading">
 
-                <!-- Collect the nav links, forms, and other content for toggling -->
-                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <!--<ul class="nav navbar-nav">-->
-                        <!--<li><a href="javascript:new lycorn.CityAroundResearch(userLocation, renderSearchResults, 'asc');">Près de chez vous</a></li>-->
-                        <!--<li><a href="javascript: new lycorn.CityAroundResearch(userLocation, renderSearchResults, 'desc');">Hum. Et le plus loin possible dans le pays ?</a></li>-->
-                    <!--</ul>-->
-
-                </div><!-- /.navbar-collapse -->
-            </nav>
-
-            <div class="container" ng-app="myApp">
-
-                <div class="row searchResults text-center" id="searchResults"  ng-controller="SearchResults">
-                    <div ng-repeat="location in locations" class="col-xs-12 col-sm-6 col-md-4 result">
-                        <div class="panel {{getMetroClass($index)}} loading" data-role="searchResult">
-                            <div class="panel-heading">
-
-                                <div class='row' ng-if="$index % 2 == 0">
-                                    <div class="col-xs-10 text-left"><h3 class="panel-title">{{location.cityName}}</h3></div>
-                                    <div class="col-xs-2 text-right"><small>{{location.weather.temp}}°C</small></div>
-                                </div>
-
-
-                                <div class='row' ng-if="$index % 2 != 0">
-                                    <div class="col-xs-2 text-left"><small>{{location.weather.temp}}°C</small></div>
-                                    <div class="col-xs-10 text-right"><h3 class="panel-title">{{location.cityName}}</h3></div>
-                                </div>
+                        <div class='row'>
+                            <div ng-if="$index % 2 == 0" class="col-xs-2 text-left">
+                                <small>{{location.weather.temp}}°C</small>
                             </div>
-                            <div class="panel-body">
-                                Loading
+                            <div class="col-xs-10" ng-class="{true: 'text-left', false: 'text-right'}[$index % 2 != 0]">
+                                <h3 class="panel-title">
+                                    <img class='tempIcon' ng-show="$index % 2 == 0" src="img/{{getTempIndicatorClass(location.weather.temp)}}.svg" />
+                                    {{location.cityName}}
+                                    <img class='tempIcon' ng-show="$index % 2 == 1" src="img/{{getTempIndicatorClass(location.weather.temp)}}.svg" />
+                                </h3>
+                            </div>
+                            <div ng-if="$index % 2 != 0" class="col-xs-2 text-right">
+                                <small>{{location.weather.temp}}°C</small>
                             </div>
                         </div>
 
-                        <div class="loading "></div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="weatherIcon">
+
+                                    <img src="img/weather/{{ location.weather.condition.toLowerCase() }}.svg" />
+                                </div>
+                            </div>
+                        </div>
+
+
+
                     </div>
                 </div>
+
+                <div class="loading "></div>
             </div>
-        </content>
-    </body>
+        </div>
+    </section>
+
+</div>
+</content>
+</body>
 </html>

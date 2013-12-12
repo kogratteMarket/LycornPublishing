@@ -10,22 +10,37 @@ body .result .panel {
   -o-border-radius: 2px;
   border-radius: 2px;
 }
-html .loader,
-body .loader {
-  z-index: 2;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+html .introduction,
+body .introduction {
+  color: white;
+}
+html .introduction .loader,
+body .introduction .loader {
+  width: 200px;
+  margin: auto;
+  margin-top: 20%;
+}
+html .introduction .loader :before,
+body .introduction .loader :before {
+  content: '';
+  vertical-align: middle;
+}
+html .introduction .loader div,
+body .introduction .loader div {
+  height: 1px;
+  width: 0;
+  margin: auto;
   background: white;
 }
-html .loader .loaderItem,
-body .loader .loaderItem {
-  width: 48px;
-  height: 48px;
-  background: url('../img/loadinfo.net.gif');
-  left: 50%;
-  bottom: 50%;
-  position: absolute;
+.tempIcon {
+  width: 10%;
+  margin-left: 20px;
+}
+.weatherIcon img {
+  width: 30%;
+  margin: auto;
+}
+.weatherIcon img.temp {
+  width: 20%;
+  float: left;
 }
