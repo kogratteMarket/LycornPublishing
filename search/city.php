@@ -64,7 +64,7 @@ while ($row = $results->fetch(PDO::FETCH_ASSOC)) {
     $weather = file_get_contents($weatherUrl);
 
     $xml = simplexml_load_string($weatherUrl);
-    $xml->
+    
 	$data[] = array(
 		'cityName' => $row['ville_nom'],
         'zipCode' => $row['ville_code_postal'],
