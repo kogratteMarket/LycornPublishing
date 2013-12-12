@@ -61,18 +61,25 @@ $data = array();
 while ($row = $results->fetch(PDO::FETCH_ASSOC)) {
 
 
-    $weatherUrl = 'http://api.previmeteo.com/06eee7d1c20d0bb49d9e909acf4ddcb0/ig/api?weather=' . $row['ville_code_postal'] . ',FR&hl=en';
-    $weather = file_get_contents($weatherUrl);
+    $weatherUrlUk = 'http://api.previmeteo.com/06eee7d1c20d0bb49d9e909acf4ddcb0/ig/api?weather=' . $row['ville_code_postal'] . ',FR&hl=en';
+    $weather = file_get_contents($weatherUrlUk);
+
+    $weatherUrlFr = 'http://api.previmeteo.com/06eee7d1c20d0bb49d9e909acf4ddcb0/ig/api?weather=' . $row['ville_code_postal'] . ',FR&hl=fr';
+    $weatherFr = file_get_contents($weatherUrlFr);
 
     $xml = simplexml_load_string($weather);
     $currentCondition = (string) $xml->weather->current_conditions->condition['data'];
     $currentTemp = (string) $xml->weather->current_conditions->temp_c['data'];
+
+    $xml = simplexml_load_string($weatherFr);
+    $currentConditionLabel = (string) $xml->weather->current_conditions->condition['data'];
 
 	$data[] = array(
 		'cityName' => $row['ville_nom'],
         'zipCode' => $row['ville_code_postal'],
         'weather' => array(
             'condition' => $currentCondition,
+            'conditionLabel' => $currentConditionLabel,
             'temp' => $currentTemp
         )
 	);

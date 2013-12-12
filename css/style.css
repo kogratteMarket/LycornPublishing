@@ -37,8 +37,7 @@ body .introduction .loader div {
   margin-left: 20px;
 }
 .weatherIcon img {
-  width: 30%;
-  margin: auto;
+  width: 100%;
 }
 .weatherIcon img.temp {
   width: 20%;

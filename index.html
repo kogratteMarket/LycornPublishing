@@ -79,7 +79,7 @@
         <div class="row searchResults text-center">
             <div ng-repeat="location in locations" class="col-xs-12 col-sm-6 col-md-4 result">
                 <div class="panel {{getMetroClass($index)}} loading" data-role="searchResult">
-                    <div ng-click="doshow[location.zipCode] = !doshow[location.zipCode]" ng-init="doshow[location.zipCode] = false" class="panel-heading">
+                    <div ng-click="doshow[location.zipCode] = !doshow[location.zipCode]" ng-init="doshow[location.zipCode] = $index == 0" class="panel-heading">
                         <div class='row'>
                             <div ng-if="$index % 2 == 0" class="col-xs-2 text-left">
                                 <small>{{location.weather.temp}}°C</small>
@@ -101,8 +101,12 @@
                         <div class="row">
                             <div class="col-xs-12">
                                 <div class="weatherIcon">
-
-                                    <img src="img/weather/{{ location.weather.condition.toLowerCase() }}.svg" />
+                                    <div class="col-xs-3">
+                                        <img src="img/weather/{{ location.weather.condition.toLowerCase() }}.svg" />
+                                    </div>
+                                    <div class="col-xs-9">
+                                        {{location.weather.conditionLabel}}
+                                    </div>
                                 </div>
                             </div>
                         </div>
