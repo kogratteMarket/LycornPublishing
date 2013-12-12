@@ -3,10 +3,11 @@
   var CityAroundResearch, Geolocation, GeolocationProvider, WeatherDetector;
 
   CityAroundResearch = (function() {
-    function CityAroundResearch(geolocation, proximity) {
+    function CityAroundResearch(geolocation, callback, proximity) {
       var searchParams, that;
       this.geolocation = geolocation;
-      this.proximity = proximity;
+      this.callback = callback != null ? callback : (function() {});
+      this.proximity = proximity != null ? proximity : 'desc';
       searchParams = {
         lat: this.geolocation.getLat(),
         long: this.geolocation.getLong(),
@@ -14,11 +15,11 @@
         proximity: this.proximity
       };
       that = this;
-      $.get('http://nik94.free.fr/LycornPublishing/search/city', searchParams, function(data) {
+      $.get('http://thelycornweather.sebacmieu.fr/search/city.php', searchParams, function(data) {
         if (typeof console !== "undefined" && console !== null) {
           console.log(data);
         }
-        return window.updateSearchResults(data);
+        return that.callback(data);
       }, 'JSON');
     }
 
@@ -68,8 +69,8 @@
   window.lycorn.Geolocation = Geolocation;
 
   GeolocationProvider = (function() {
-    function GeolocationProvider() {
-      this.positionAvailableEvent = 'locationAvailable';
+    function GeolocationProvider(callback) {
+      this.callback = callback != null ? callback : (function() {});
       this.doc = jQuery(document);
       this.geolocationOpts = {
         enableHighAccuracy: true,
@@ -93,7 +94,7 @@
         long = position.coords.longitude;
         geocodingParams = {
           latlng: lat + ',' + long,
-          sensor: true
+          sensor: 'true'
         };
         return $.get('http://maps.googleapis.com/maps/api/geocode/json', geocodingParams, function(data) {
           var city, component, country, type, _i, _len, _ref;
@@ -126,10 +127,32 @@
       var provider;
       provider = this;
       $.get('http://ipinfo.io/json', function(data) {
-        var lat, long, _tmp;
+        var geocodingParams, lat, long, _tmp;
         _tmp = data.loc.split(',');
         lat = _tmp[0];
         long = _tmp[1];
+        if (!data.city || !data.country) {
+          geocodingParams = {
+            latlng: lat + ',' + long,
+            sensor: 'true'
+          };
+          $.get('http://maps.googleapis.com/maps/api/geocode/json', geocodingParams, function(data) {
+            var city, component, country, type, _i, _len, _ref;
+            for (component in results.address_components) {
+              _ref = component.types;
+              for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                type = _ref[_i];
+                if (type === "locality") {
+                  city = component.short_name;
+                }
+                if (type === "country") {
+                  country = component.short_name;
+                }
+              }
+            }
+            provider.buildLocation(lat, long, city, country, 'GPS');
+          });
+        }
         provider.buildLocation(lat, long, data.city, data.country, 'IP');
       }, 'JSON');
     };
@@ -137,7 +160,7 @@
     GeolocationProvider.prototype.buildLocation = function(lat, long, city, country, type) {
       var location;
       location = new lycorn.Geolocation(lat, long, city, country, type);
-      this.doc.trigger(this.positionAvailableEvent, location);
+      this.callback(location);
     };
 
     if (!window.lycorn) {
@@ -155,7 +178,7 @@
   window.myApp.factory('updateSearchResults', function($window, $q, $rootScope) {
     var deferred;
     deferred = $q.defer();
-    $window.updateSearchResults = function(obj) {
+    $window.renderSearchResults = function(obj) {
       deferred.resolve(obj);
       return $rootScope.$apply();
     };
@@ -176,9 +199,10 @@
   });
 
   WeatherDetector = (function() {
-    function WeatherDetector(cityData) {
+    function WeatherDetector(cityData, callback) {
       var requestParams, that;
       this.cityData = cityData;
+      this.callback = callback != null ? callback : (function() {});
       this.providerUrl = 'http://api.previmeteo.com/06eee7d1c20d0bb49d9e909acf4ddcb0/ig/api';
       if (typeof console !== "undefined" && console !== null) {
         console.log('New weather request for', this.cityData);
