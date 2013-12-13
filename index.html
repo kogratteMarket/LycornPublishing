@@ -9,7 +9,7 @@
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.4/angular.min.js"></script>
 
     <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-    <script type="text/javascript" src="js/main.min.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
 
     <script type="text/javascript">
         /**
@@ -119,9 +119,9 @@
                             </div>
                             <div class="col-xs-10" ng-class="{true: 'text-left', false: 'text-right'}[$index % 2 != 0]">
                                 <h3 class="panel-title">
-                                    <img class='tempIcon' ng-show="$index % 2 == 0" src="img/{{getTempIndicatorClass(location.weather.temp)}}.svg" />
+                                    <img class='tempIcon' ng-show="$index % 2 == 0" ng-src="img/{{getTempIndicatorClass(location.weather.temp)}}.svg" />
                                     {{location.cityName}}
-                                    <img class='tempIcon' ng-show="$index % 2 == 1" src="img/{{getTempIndicatorClass(location.weather.temp)}}.svg" />
+                                    <img class='tempIcon' ng-show="$index % 2 == 1" ng-src="img/{{getTempIndicatorClass(location.weather.temp)}}.svg" />
                                 </h3>
                             </div>
                             <div ng-if="$index % 2 != 0" class="col-xs-2 text-right">
@@ -135,7 +135,7 @@
                             <div class="col-xs-12">
                                 <div class="weatherIcon">
                                     <div class="col-xs-3">
-                                        <img src="img/weather/{{ location.weather.condition.toLowerCase() }}.svg" />
+                                        <img ng-src="img/weather/{{ location.weather.condition.toLowerCase() }}.svg" />
                                     </div>
                                     <div class="col-xs-9">
                                         {{location.weather.conditionLabel}}
