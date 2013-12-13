@@ -1,3 +1,4 @@
+# This mod is charged to animate the loader during city and weather research.
 class Loader
    @default =
       nbItems: 10
@@ -20,6 +21,7 @@ class Loader
    animateDecrease: ->
       that = this
 
+      # @ refer to this. This is sugar feature of coffeescript.
       @element.animate({
          width: '0%'
       }, 'slow', 'swing', ->

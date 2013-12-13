@@ -1,2 +1,6 @@
+#!/bin/sh
+
+echo "Compiling coffee code"
 coffee --join main.js --compile --output . src/
-uglifyjs -o main.min.js main.js vendor/*.js
+echo "Generating minified file"
+uglifyjs -c -o main.min.js main.js

@@ -9,11 +9,22 @@
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.4/angular.min.js"></script>
 
     <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-    <script type="text/javascript" src="js/main.js"></script>
+    <script type="text/javascript" src="js/main.min.js"></script>
 
     <script type="text/javascript">
+        /**
+         * I am storing the user location on the global scope, to be able to access it from anywhere
+         */
         var userLocation;
 
+        /**
+         * As you can see, I start with my usual jQuery lib, but during some refactorisation nights,
+         * I choose to use a little bit of Angular, just to avoid to implement a template engine using JQuery.
+         *
+         * Some other solutions could be used, like mustache or dust (the first one is logic-less)
+         *
+         * This method is required to manipulate the angular dom from a JQuery callback.
+         */
         function renderSearchResults(results) {
             angular.element(document.getElementById('searchResults')).scope().$apply(function ($scope) {
                 console.log('Apply results', results, $scope);
@@ -23,18 +34,40 @@
                 $(document).trigger('searchResultsRendered');
             });
         }
+
         $(function () {
 
+            /**
+             * This mod can be found in the GeolocationProvider.coffee file.
+             * I prefer to use coffee, that I found more readable than native javascript.
+             *
+             * Compiled coffee code would produce native JS too.
+             *
+             * In a first time, I was using events to notify each mod that an information is available,
+             * but it was euu... Scary. That's why I rewrite my code more than once, and need a biiiig night!
+             */
             new lycorn.GeolocationProvider(function (location) {
                 window.userLocation = location;
+                /**
+                When location is available, I launch a research on city around me and provide the result
+                to the renderSearchResults method.
+                 */
                 new lycorn.CityAroundResearch(location, renderSearchResults);
             });
 
+            /**
+             * This is the JS mode how animate the loading bar. Very simple and available in the Loader.coffee
+             */
             new lycornLoader($('.loader div'));
 
+            /**
+             * The loader is displayed until search results have not been rendered.
+             * I bind the event with one, because I can imagine some feature rendering again search results.
+             */
             $(document).one('searchResultsRendered', function (e) {
 
                 $('.introduction').fadeOut('slow', function (e) {
+                    /* Remove useless dom element */
                     $(this).remove();
                 });
             });

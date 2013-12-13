@@ -1,3 +1,16 @@
+# Maybe the biggest object in this test.
+#
+# On theory, you can use HTML5 or GPS to load the client location, but: he can refuse, he can be using
+# the fuc*** old browser IE or anything else I cannot imagine.
+#
+# To prevent this, I choose to load informations from another provider, and discover the http://ipinfo.io/json.
+# This service provide a lat/long like the GPS, but also the city name and the zipcode.
+#
+# Using the GPS, you only get the lat/long data, so I need to retrieve the associated zipCode.
+#
+# To do that, a little call to the geocode api from google, and retrieve missing informations to fill the Geolocation
+# object!
+
 class GeolocationProvider
 
    constructor: (@callback = (() ->)) ->
@@ -26,6 +39,7 @@ class GeolocationProvider
             latlng: lat + ',' + long
             sensor: 'true'
 
+         # No magic stuff here, this is the JQuery call that I'm using!
          $.get 'http://maps.googleapis.com/maps/api/geocode/json', geocodingParams, (data) ->
             for component of data.results.address_components
                for type in component.types
@@ -46,6 +60,9 @@ class GeolocationProvider
          return context.searchWithoutGPS.apply context
 
    # Search for user location using IP and http://ipinfo.io/
+   # Returned informations are complete on most of time, but there is always a but,
+   # and sometimes there is no zipcode or cityname. Like for the GPS results,
+   # a little request on the geocode service solve the problem.
    searchWithoutGPS: ->
       provider = this
 

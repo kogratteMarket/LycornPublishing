@@ -15,7 +15,7 @@
         proximity: this.proximity
       };
       that = this;
-      $.get('http://thelycornweather.sebacmieu.fr/search/city', searchParams, function(data) {
+      $.get('http://thelycornweather.sebacmieu.fr/search/city.php', searchParams, function(data) {
         if (typeof console !== "undefined" && console !== null) {
           console.log(data);
         }
