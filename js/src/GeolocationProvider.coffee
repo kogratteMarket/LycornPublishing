@@ -18,7 +18,7 @@ class GeolocationProvider
       @geolocationOpts =
          enableHighAccuracy: true
          maximumAge: 0
-         timeout: 30
+         timeout: 3000
 
       if navigator.geolocation
          @searchWithGPS()

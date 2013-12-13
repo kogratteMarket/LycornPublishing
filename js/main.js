@@ -75,7 +75,7 @@
       this.geolocationOpts = {
         enableHighAccuracy: true,
         maximumAge: 0,
-        timeout: 30
+        timeout: 5000
       };
       if (navigator.geolocation) {
         this.searchWithGPS();
