@@ -106,14 +106,17 @@ while ($row = $results->fetch(PDO::FETCH_ASSOC)) {
     /**
      * Just push data into the result set
      */
+     if (!$currentTemp) {
+continue;
+}
     $data[] = array(
         'cityName' => $row['ville_nom'],
         'zipCode'  => $row['ville_code_postal'],
         'weather'  => array(
-            'condition'      => $currentCondition,
+            'condition'      => str_replace(' ', '_', $currentCondition),
             // Did you ever try to json_encode a non utf8 character? Result would be as simple as the empty. Nothing.
             // And no error, what question!
-            'conditionLabel' => utf8_encode($currentConditionLabel),
+            'conditionLabel' => $currentConditionLabel,
             'temp'           => $currentTemp
         )
     );
